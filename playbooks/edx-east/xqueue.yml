@@ -26,9 +26,6 @@
       when: elb_pre_post
   roles:
     - aws
-    - role: nginx
-      nginx_sites:
-      - xqueue
     - role: xqueue
     - role: datadog
       when: COMMON_ENABLE_DATADOG
