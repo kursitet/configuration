@@ -5,7 +5,7 @@
 # installs
 
 - name: Configure instance(s)
-  hosts: all
+  hosts: olymp
   sudo: True
   gather_facts: True
   vars:
@@ -19,7 +19,7 @@
     COMMON_ENABLE_DATADOG: False
     COMMON_ENABLE_SPLUNKFORWARDER: False
   roles:
-    - { role: swapfile, SWAPFILE_SIZE: "2GB" }
+#    - { role: swapfile, SWAPFILE_SIZE: "2GB" }
     - role: nginx
       nginx_sites:
       - certs
@@ -29,22 +29,22 @@
       - xqueue
       nginx_default_sites:
       - lms
-    - role: mysql
-      when: EDXAPP_MYSQL_HOST == 'localhost'
-    - edxlocal
-    - role: mongo
-      when: "'localhost' in EDXAPP_MONGO_HOSTS"
-    - { role: 'edxapp', celery_worker: True }
+#    - role: mysql
+#      when: EDXAPP_MYSQL_HOST == 'localhost'
+#    - edxlocal
+#    - role: mongo
+#      when: "'localhost' in EDXAPP_MONGO_HOSTS"
+#    - { role: 'edxapp', celery_worker: True }
     - edxapp
     - notifier
     - analytics_api
-    - edx_notes_api
+#    - edx_notes_api
     - demo
     - oauth_client_setup
     - { role: 'rabbitmq', rabbitmq_ip: '127.0.0.1' }
     - oraclejdk
     - role: elasticsearch
-      when: "'localhost' in EDXAPP_ELASTIC_SEARCH_CONFIG|map(attribute='host')"
+#      when: "'localhost' in EDXAPP_ELASTIC_SEARCH_CONFIG|map(attribute='host')"
     - forum
     - { role: notifier, NOTIFIER_DIGEST_TASK_INTERVAL: "5" }
     - { role: "xqueue", update_users: True }

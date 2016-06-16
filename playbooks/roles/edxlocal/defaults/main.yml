@@ -4,7 +4,6 @@ edxlocal_debian_pkgs:
   - libjpeg-dev
 
 edxlocal_databases:
-  - "{{ ECOMMERCE_DEFAULT_DB_NAME | default(None) }}"
   - "{{ INSIGHTS_DATABASE_NAME | default(None) }}"
   - "{{ ORA_MYSQL_DB_NAME | default(None) }}"
   - "{{ XQUEUE_MYSQL_DB_NAME | default(None) }}"
@@ -16,19 +15,9 @@ edxlocal_databases:
 
 edxlocal_database_users:
   - {
-      db: "{{ ECOMMERCE_DEFAULT_DB_NAME | default(None) }}",
-      user: "{{ ECOMMERCE_DATABASES.default.USER | default(None) }}",
-      pass: "{{ ECOMMERCE_DATABASES.default.PASSWORD | default(None) }}"
-    }
-  - {
       db: "{{ INSIGHTS_DATABASE_NAME | default(None) }}",
       user: "{{ INSIGHTS_DATABASES.default.USER | default(None) }}",
       pass: "{{ INSIGHTS_DATABASES.default.PASSWORD | default(None) }}"
-    }
-  - {
-      db: "{{ ORA_MYSQL_DB_NAME | default(None) }}",
-      user: "{{ ORA_MYSQL_USER | default(None) }}",
-      pass: "{{ ORA_MYSQL_PASSWORD | default(None) }}"
     }
   - {
       db: "{{ XQUEUE_MYSQL_DB_NAME | default(None) }}",
@@ -41,14 +30,9 @@ edxlocal_database_users:
       pass: "{{ EDXAPP_MYSQL_PASSWORD | default(None) }}"
     }
   - {
-      db: "{{ PROGRAMS_DEFAULT_DB_NAME | default(None) }}",
-      user: "{{ PROGRAMS_DATABASES.default.USER | default(None) }}",
-      pass: "{{ PROGRAMS_DATABASES.default.PASSWORD | default(None) }}"
-    }
-  - {
       db: "{{ ANALYTICS_PIPELINE_OUTPUT_DATABASE_NAME | default(None) }}",
-      user: "{{ ANALYTICS_PIPELINE_OUTPUT_DATABASE.username }}",
-      pass: "{{ ANALYTICS_PIPELINE_OUTPUT_DATABASE.password }}"
+      user: "{{ ANALYTICS_PIPELINE_OUTPUT_DATABASE.username | default(None) }}",
+      pass: "{{ ANALYTICS_PIPELINE_OUTPUT_DATABASE.password | default(None) }}"
     }
   - {
       db: "{{ HIVE_METASTORE_DATABASE_NAME | default(None) }}",

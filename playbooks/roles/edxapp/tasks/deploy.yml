@@ -193,9 +193,12 @@
   environment: "{{ edxapp_environment }}"
   when: item.stat.exists
   with_items: "{{ python_requirement_files.results }}"
+  register: result
   tags:
     - install
     - install:app-requirements
+
+- debug: var=result
 
 # Private requriements require a ssh key to install, use the same key as the private key for edx-platform
 # If EDXAPP_INSTALL_PRIVATE_REQUIREMENTS is set to true EDXAPP_USE_GIT_IDENTITY must also be true
