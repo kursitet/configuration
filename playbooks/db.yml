@@ -1,0 +1,40 @@
+- name: Conf DBs
+  hosts: db
+  sudo : True
+  gather_facts: True
+  vars:
+    migrate_db: "yes"
+    openid_workaround: True
+    EDXAPP_LMS_NGINX_PORT: '80'
+    edx_platform_version: 'master'
+   # Set to false if deployed behind another proxy/load balancer.
+    NGINX_SET_X_FORWARDED_HEADERS: True
+    # These should stay false for the public AMI
+    COMMON_ENABLE_DATADOG: False
+    COMMON_ENABLE_SPLUNKFORWARDER: False
+    COMMON_EDX_PPA_KEY_SERVER: "keyserver.ubuntu.com"
+  vars_files:
+    - roles/edxapp/defaults/main.yml
+    - roles/xqueue/defaults/main.yml
+    - roles/forum/defaults/main.yml
+    - roles/edx_notes_api/defaults/main.yml
+    - roles/common_vars/defaults/main.yml
+    - roles/analytics_api/defaults/main.yml
+
+  pre_tasks:
+    - name: install required packages
+      apt: pkg={{item}} state=present install_recommends=no
+      with_items:
+      - build-essential
+      - software-properties-common
+      - python-software-properties
+      - curl
+      - git-core
+      - libxml2-dev
+      - libxslt1-dev
+
+  roles:
+    - common
+    - mysql
+    - edxlocal
+    - mongo
