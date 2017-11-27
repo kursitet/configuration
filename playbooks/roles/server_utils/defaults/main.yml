@@ -38,5 +38,8 @@ server_utils_debian_pkgs:
   - dnsutils
   - inetutils-telnet
   - netcat
+  - mc
+  - p7zip-full
+  - silversearcher-ag
 
 server_utils_redhat_pkgs: []
