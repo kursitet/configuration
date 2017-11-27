@@ -41,5 +41,6 @@ server_utils_debian_pkgs:
   - mc
   - p7zip-full
   - silversearcher-ag
+  - htop
 
 server_utils_redhat_pkgs: []
