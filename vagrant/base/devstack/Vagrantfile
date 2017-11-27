@@ -83,22 +83,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vbguest.auto_reboot = true
   config.vbguest.auto_update = true
 
-  config.vm.provision :ansible_local do |ansible|
-    ansible.playbook = "/vagrant/configuration/playbooks/vagrant-devstack.yml"
-    ansible.playbook_command = "/edx/app/edx_ansible/venvs/edx_ansible/bin/ansible-playbook"
-    ansible.install = false
-    ansible.verbose = "vv"
-
-    ansible.extra_vars = {}
-    VERSION_VARS.each do |var|
-      if ENV['OPENEDX_RELEASE']
-        ansible.extra_vars[var] = ENV['OPENEDX_RELEASE']
-      end
-      env_var = var.upcase
-      if ENV[env_var]
-        ansible.extra_vars[var] = ENV[env_var]
-      end
-    end
-
-  end
 end
