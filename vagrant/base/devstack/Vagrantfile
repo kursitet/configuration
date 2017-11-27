@@ -76,14 +76,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", inline: 'echo \'LC_ALL="en_US.UTF-8"\' > /etc/default/locale'
 
   # Get ready for ansible on this box.
-  config.vm.provision "shell", path: '../../../util/install/ansible-bootstrap.sh'
+  config.vm.provision "shell", path: 'configuration/util/install/ansible-bootstrap.sh'
 
   # Use vagrant-vbguest plugin to make sure Guest Additions are in sync
   config.vbguest.auto_reboot = true
   config.vbguest.auto_update = true
 
   config.vm.provision :ansible do |ansible|
-    ansible.playbook = "../../../playbooks/vagrant-devstack.yml"
+    ansible.playbook = "configuration/playbooks/vagrant-devstack.yml"
     ansible.verbose = "vv"
 
     ansible.extra_vars = {}

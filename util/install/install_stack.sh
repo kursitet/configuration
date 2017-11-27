@@ -162,6 +162,11 @@ if [[ -d .vagrant ]]; then
     exit 1
 fi
 
+# Mihara: This script basically doesn't work with base boxes, only with release boxes.
+# Unfortunately, base boxes is what we need, because release boxes come with a preinstalled
+# configuration repository.
+git clone -b $OPENEDX_RELEASE https://github.com/kursitet/configuration configuration
+
 if [[ $stack == "devstack" ]]; then # Install devstack
     # Warn if release chosen is not master or open-release (Eucalyptus and up)
     if [[ $release != "master" && $release != "open-release"* ]]; then
@@ -169,7 +174,7 @@ if [[ $stack == "devstack" ]]; then # Install devstack
     fi
 
     wiki_link="https://openedx.atlassian.net/wiki/display/OpenOPS/Running+Devstack"
-    curl -fOL# https://raw.githubusercontent.com/kursitet/configuration/${OPENEDX_RELEASE}/vagrant/base/devstack/Vagrantfile
+    ln -s Vagrantfile configuration/vagrant/base/devstack/Vagrantfile
     vagrant plugin install vagrant-vbguest
 elif [[ $stack == "fullstack" ]]; then # Install fullstack
     # Warn if release chosen is not open-release (Eucalyptus and up)
@@ -178,7 +183,7 @@ elif [[ $stack == "fullstack" ]]; then # Install fullstack
     fi
 
     wiki_link="https://openedx.atlassian.net/wiki/display/OpenOPS/Running+Fullstack"
-    curl -fOL# https://raw.githubusercontent.com/kursitet/configuration/${OPENEDX_RELEASE}/vagrant/base/fullstack/Vagrantfile
+    ln -s Vagrantfile configuration/vagrant/base/fullstack/Vagrantfile
     vagrant plugin install vagrant-hostsupdater
 else # Throw error
     echo -e "${ERROR}Unrecognized stack name, must be either devstack or fullstack!${NC}"
