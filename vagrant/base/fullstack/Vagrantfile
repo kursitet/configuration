@@ -31,7 +31,7 @@ VERSION_VARS = [
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Creates a machine from a base Ubuntu 16.04 image for virtualbox
-  config.vm.box = "box-cutter/ubuntu1604"
+  config.vm.box = "kursitet/ubuntu1604"
 
   config.vm.network :private_network, ip: vm_guest_ip, nic_type: "virtio"
 
