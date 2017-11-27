@@ -165,7 +165,7 @@ fi
 # Mihara: This script basically doesn't work with base boxes, only with release boxes.
 # Unfortunately, base boxes is what we need, because release boxes come with a preinstalled
 # configuration repository.
-git clone -b $OPENEDX_RELEASE https://github.com/kursitet/configuration configuration
+git clone -b $OPENEDX_RELEASE https://github.com/kursitet/configuration configuration || true
 
 if [[ $stack == "devstack" ]]; then # Install devstack
     # Warn if release chosen is not master or open-release (Eucalyptus and up)
