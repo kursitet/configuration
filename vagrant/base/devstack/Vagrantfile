@@ -83,8 +83,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vbguest.auto_reboot = true
   config.vbguest.auto_update = true
 
-  config.vm.provision :ansible do |ansible|
-    ansible.playbook = "configuration/playbooks/vagrant-devstack.yml"
+  config.vm.provision :ansible_local do |ansible|
+    ansible.playbook = "/vagrant/configuration/playbooks/vagrant-devstack.yml"
+    ansible.playbook_command = "/edx/app/edx_ansible/venvs/edx_ansible/bin/ansible-playbook"
+    ansible.install = false
     ansible.verbose = "vv"
 
     ansible.extra_vars = {}
