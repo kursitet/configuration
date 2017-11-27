@@ -76,7 +76,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", inline: 'echo \'LC_ALL="en_US.UTF-8"\' > /etc/default/locale'
 
   # Get ready for ansible on this box.
-  config.vm.provision "shell", path: 'configuration/util/install/ansible-bootstrap.sh'
+  config.vm.provision "shell", path: 'configuration/util/install/ansible-bootstrap.sh', 
+    env: { "CONFIGURATION_VERSION": "ginkgo.release", "CONFIGURATION_REPO": "https://github.com/kursitet/configuration.git" }
 
   # Use vagrant-vbguest plugin to make sure Guest Additions are in sync
   config.vbguest.auto_reboot = true
