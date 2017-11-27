@@ -27,9 +27,9 @@ VERSION_VARS = [
 MOUNT_DIRS = {
   :edx_platform => {:repo => "edx-platform", :local => "/edx/app/edxapp/edx-platform", :owner => "edxapp"},
   :themes => {:repo => "themes", :local => "/edx/app/edxapp/themes", :owner => "edxapp"},
-  :forum => {:repo => "cs_comments_service", :local => "/edx/app/forum/cs_comments_service", :owner => "forum"},
-  :ecommerce => {:repo => "ecommerce", :local => "/edx/app/ecommerce/ecommerce", :owner => "ecommerce"},
-  :ecommerce_worker => {:repo => "ecommerce-worker", :local => "/edx/app/ecommerce_worker/ecommerce_worker", :owner => "ecommerce_worker"},
+  #:forum => {:repo => "cs_comments_service", :local => "/edx/app/forum/cs_comments_service", :owner => "forum"},
+  #:ecommerce => {:repo => "ecommerce", :local => "/edx/app/ecommerce/ecommerce", :owner => "ecommerce"},
+  #:ecommerce_worker => {:repo => "ecommerce-worker", :local => "/edx/app/ecommerce_worker/ecommerce_worker", :owner => "ecommerce_worker"},
   # This src directory won't have useful permissions. You can set them from the
   # vagrant user in the guest OS. "sudo chmod 0777 /edx/src" is useful.
   :src => {:repo => "src", :local => "/edx/src", :owner => "root"},
@@ -39,41 +39,8 @@ if ENV['VAGRANT_MOUNT_BASE']
   MOUNT_DIRS.each { |k, v| MOUNT_DIRS[k][:repo] = ENV['VAGRANT_MOUNT_BASE'] + "/" + MOUNT_DIRS[k][:repo] }
 end
 
-# map the name of the git branch that we use for a release
-# to a name and a file path, which are used for retrieving
-# a Vagrant box from the internet.
-openedx_releases = {
-  "open-release/ginkgo.master" => "ginkgo-devstack-2017-07-14",
-  "open-release/ginkgo.1rc1" => "ginkgo-devstack-2017-07-14",
-  "open-release/ginkgo.1" => "ginkgo-devstack-2017-07-14",
-
-  "open-release/ficus.master" => "ficus-devstack-2017-02-07",
-  "open-release/ficus.1rc1" => "ficus-devstack-2017-01-11",
-  "open-release/ficus.1rc3" => "ficus-devstack-2017-02-07",
-  "open-release/ficus.1rc4" => "ficus-devstack-2017-02-07",
-  "open-release/ficus.1" => "ficus-devstack-2017-02-07",
-  "open-release/ficus.2" => "ficus-devstack-2017-02-07",
-  "open-release/ficus.3" => "ficus-devstack-2017-02-07",
-
-  "open-release/eucalyptus.master" => "eucalyptus-devstack-2016-09-01",
-  "open-release/eucalyptus.1rc2" => "eucalyptus-devstack-2016-08-19",
-  "open-release/eucalyptus.1" => "eucalyptus-devstack-2016-08-19",
-  "open-release/eucalyptus.2" => "eucalyptus-devstack-2016-09-01",
-
-  "named-release/dogwood.rc" => "dogwood-devstack-2016-03-09",
-  "named-release/dogwood.1" => "dogwood-devstack-2016-03-09",
-  "named-release/dogwood.2" => "dogwood-devstack-2016-03-09",
-  "named-release/dogwood.3" => "dogwood-devstack-2016-03-09",
-  "named-release/dogwood" => {
-    :name => "dogwood-devstack-rc2", :file => "20151221-dogwood-devstack-rc2.box",
-  },
-  # Cypress is deprecated and unsupported
-  # Birch is deprecated and unsupported
-}
-openedx_releases.default = "ginkgo-devstack-2017-07-14"
-
-openedx_release = ENV['OPENEDX_RELEASE']
-boxname = ENV['OPENEDX_BOXNAME']
+openedx_release = "ginkgo.release"
+boxname = "kursitet/ginkgo"
 
 # Build -e override lines for each overridable variable.
 extra_vars_lines = ""
@@ -103,23 +70,7 @@ SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  boxfile = ""
-  if not boxname
-    reldata = openedx_releases[openedx_release]
-    if Hash == reldata.class
-      boxname = openedx_releases[openedx_release][:name]
-      boxfile = openedx_releases[openedx_release].fetch(:file, "")
-    else
-      boxname = reldata
-    end
-  end
-  if boxfile == ""
-    boxfile = "#{boxname}.box"
-  end
-
-  # Creates an edX devstack VM from an official release
   config.vm.box     = boxname
-  config.vm.box_url = "http://files.edx.org/vagrant-images/#{boxfile}"
   config.vm.box_check_update = false
 
   config.vm.network :private_network, ip: "192.168.33.10"
