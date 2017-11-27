@@ -174,7 +174,7 @@ if [[ $stack == "devstack" ]]; then # Install devstack
     fi
 
     wiki_link="https://openedx.atlassian.net/wiki/display/OpenOPS/Running+Devstack"
-    ln -s Vagrantfile configuration/vagrant/base/devstack/Vagrantfile
+    ln -s configuration/vagrant/base/devstack/Vagrantfile Vagrantfile
     vagrant plugin install vagrant-vbguest
 elif [[ $stack == "fullstack" ]]; then # Install fullstack
     # Warn if release chosen is not open-release (Eucalyptus and up)
@@ -183,7 +183,7 @@ elif [[ $stack == "fullstack" ]]; then # Install fullstack
     fi
 
     wiki_link="https://openedx.atlassian.net/wiki/display/OpenOPS/Running+Fullstack"
-    ln -s Vagrantfile configuration/vagrant/base/fullstack/Vagrantfile
+    ln -s configuration/vagrant/base/fullstack/Vagrantfile Vagrantfile
     vagrant plugin install vagrant-hostsupdater
 else # Throw error
     echo -e "${ERROR}Unrecognized stack name, must be either devstack or fullstack!${NC}"
