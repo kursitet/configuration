@@ -26,15 +26,20 @@
     - install
     - install:base
   
-- name: Install python pymongo for mongo_user ansible module
-  pip:
-    name: pymongo
-    state: present
-    version: "{{ pymongo_version }}"
-    extra_args: "-i {{ COMMON_PYPI_MIRROR_URL }}"
-  tags:
-    - install
-    - install:base
+# Mihara: For some bizarre reason, this always results in reinstalling pymongo
+# into the eds_ansible venv, even though it is always present -- edx_ansible role installs it.
+# And reinstalling pymongo always results in mongodb_user module not finding it.
+# I'm hoping this will fix that...
+#
+#- name: Install python pymongo for mongo_user ansible module
+#  pip:
+#    name: pymongo
+#    state: present
+#    version: "{{ pymongo_version }}"
+#    extra_args: "-i {{ COMMON_PYPI_MIRROR_URL }}"
+#  tags:
+#    - install
+#    - install:base
 
 - name: Add the mongodb signing key
   apt_key:
