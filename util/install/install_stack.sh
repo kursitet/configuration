@@ -38,13 +38,6 @@ function usage
         release or master.
 
     RELEASE
-
-        This has been modified for Kursitet: the configuration repository
-        we are using is a fork to substitute our own defaults and repositories
-        where needed. The default is the release you want.
-
-        Original documentation has been preserved for reference:
-
         The release of Open edX to install.  Defaults to \$OPENEDX_RELEASE.
         Open edX releases are called "open-release/eucalyptus.1",
         "open-release/eucalyptus.2", and so on.
@@ -78,7 +71,7 @@ NC='\033[0m' # No Color
 # Output verbosity
 verbosity=0
 # OPENEDX_RELEASE
-release="ginkgo.release"
+release=""
 # Vagrant source code provision location
 vagrant_mount_location=""
 
@@ -122,13 +115,13 @@ if [[ $1 ]]; then
     release=$1
     shift
 else
-    release="ginkgo.release"
+    release=$OPENEDX_RELEASE
 fi
 
-#if [[ ! $release ]]; then
-#    echo "You must specify RELEASE, or define OPENEDX_RELEASE before running."
-#    exit 1
-#fi
+if [[ ! $release ]]; then
+    echo "You must specify RELEASE, or define OPENEDX_RELEASE before running."
+    exit 1
+fi
 
 # If there are positional arguments left, something is wrong.
 if [[ $1 ]]; then
@@ -162,11 +155,6 @@ if [[ -d .vagrant ]]; then
     exit 1
 fi
 
-# Mihara: This script basically doesn't work with base boxes, only with release boxes.
-# Unfortunately, base boxes is what we need, because release boxes come with a preinstalled
-# configuration repository.
-git clone -b $OPENEDX_RELEASE https://github.com/kursitet/configuration configuration || true
-
 if [[ $stack == "devstack" ]]; then # Install devstack
     # Warn if release chosen is not master or open-release (Eucalyptus and up)
     if [[ $release != "master" && $release != "open-release"* ]]; then
@@ -174,7 +162,7 @@ if [[ $stack == "devstack" ]]; then # Install devstack
     fi
 
     wiki_link="https://openedx.atlassian.net/wiki/display/OpenOPS/Running+Devstack"
-    ln -s configuration/vagrant/base/devstack/Vagrantfile Vagrantfile
+    curl -fOL# https://raw.githubusercontent.com/edx/configuration/${OPENEDX_RELEASE}/vagrant/release/devstack/Vagrantfile
     vagrant plugin install vagrant-vbguest
 elif [[ $stack == "fullstack" ]]; then # Install fullstack
     # Warn if release chosen is not open-release (Eucalyptus and up)
@@ -183,7 +171,7 @@ elif [[ $stack == "fullstack" ]]; then # Install fullstack
     fi
 
     wiki_link="https://openedx.atlassian.net/wiki/display/OpenOPS/Running+Fullstack"
-    ln -s configuration/vagrant/base/fullstack/Vagrantfile Vagrantfile
+    curl -fOL# https://raw.githubusercontent.com/edx/configuration/${OPENEDX_RELEASE}/vagrant/release/fullstack/Vagrantfile
     vagrant plugin install vagrant-hostsupdater
 else # Throw error
     echo -e "${ERROR}Unrecognized stack name, must be either devstack or fullstack!${NC}"

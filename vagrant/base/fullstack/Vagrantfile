@@ -31,7 +31,7 @@ VERSION_VARS = [
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Creates a machine from a base Ubuntu 16.04 image for virtualbox
-  config.vm.box = "kursitet/ubuntu1604"
+  config.vm.box = "boxcutter/ubuntu1604"
 
   config.vm.network :private_network, ip: vm_guest_ip, nic_type: "virtio"
 
@@ -51,12 +51,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # See: https://github.com/mitchellh/vagrant/issues/1188
   config.vm.provision "shell", inline: 'echo \'LC_ALL="en_US.UTF-8"\' > /etc/default/locale'
 
-  config.vm.provision :ansible_local do |ansible|
-    ansible.playbook_command = "/edx/app/edx_ansible/venvs/edx_ansible/bin/ansible-playbook"
-    ansible.install = false
-
+  config.vm.provision :ansible do |ansible|
     # point Vagrant at the location of your playbook you want to run
-    ansible.playbook = "configuration/playbooks/edx_sandbox.yml"
+    ansible.playbook = "../../../playbooks/edx_sandbox.yml"
     ansible.verbose = "vv"
 
     # Set extra-vars here instead of in the vagrant play so that
